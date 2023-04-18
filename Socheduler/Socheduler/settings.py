@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "frontend",
     "backend",
     "rest_framework",  # Django Rest Framework
     "django.contrib.admin",
@@ -42,6 +43,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # AllAuth UI
+    "allauth_ui",
+    "widget_tweaks",
     # Django AllAuth
     'allauth',
     'allauth.account',
@@ -80,7 +84,7 @@ ROOT_URLCONF = "Socheduler.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -142,7 +146,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Media Files (User uploaded images and other medias)
 # https://docs.djangoproject.com/en/4.2/topics/files/
@@ -175,23 +182,7 @@ CELERY_BREAT_SCHEDULER = {
 # AllAuth Settings
 
 SITE_ID = 1
-
-SOCIALACCOUNT_PROVIDERS = {
-    # 'twitter': {
-    #     'APP': {
-    #         'consumer_key': os.getenv("TWITTER_CONSUMER_KEY"),
-    #         'consumer_secret': os.getenv("TWITTER_CONSUMER_SECRET"),
-    #         'access_token': os.getenv("TWITTER_ACCESS_TOKEN"),
-    #         'access_token_secret': os.getenv("TWITTER_ACCESS_SECRET"),
-    #     }
-    # },
-    'github': {
-        'SCOPE': ['user'],
-        'APP': {
-            'client_id': os.getenv("GITHUB_CLIENT_ID"),
-            'secret': os.getenv("GITHUB_CLIENT_SECRET"),
-            'key': '',
-        }
-    }
-}
+LOGIN_REDIRECT_URL = "/"
+SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
 

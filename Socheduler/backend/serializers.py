@@ -4,6 +4,8 @@ from . import models
 
 
 class SocialAccontSerializer(serializers.ModelSerializer):
+    platform = serializers.MultipleChoiceField(choices=models.SocialMediaAccount().platforms_list)
+
     class Meta:
         model = models.SocialMediaAccount
         fields = ["id", "username", "platform"]

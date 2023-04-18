@@ -1,0 +1,188 @@
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {% block extra_head %}
+  {% endblock %}
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Scheduler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-Lfa8zqfy3PQjZxvFkWtX8Fe0+PN1d4ELZZ/ZOvjWQJ0j+oWoMJzqxJ1vLxWJX8/WTnYJy6/1ikpA5C6fSKuGQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        form input[type="text"],
+        form textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .fa {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button.secondaryAction {
+            margin-right: 10px;
+            background-color: #ccc;
+        }
+
+        button.primaryAction:hover,
+        button.secondaryAction:hover {
+            opacity: .8;
+        }
+
+        .navbar-container {
+            margin: 0 auto;
+            padding: 100px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+            color: black;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+        }
+
+        .navbar-menu {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-item {
+            margin-right: 10px;
+        }
+
+        .navbar-link {
+            color: #020202;
+            text-decoration: none;
+        }
+
+        .navbar-user {
+            display: flex;
+        }
+
+        .navbar-username {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .navbar-dropdown {
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+        }
+
+        .navbar-dropdown-link {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .navbar-user:hover .navbar-dropdown {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-container">
+    <a class="navbar-brand" href="/">My Website</a>
+    <div class="navbar-menu">
+      <ul class="navbar-nav">
+        <li class="navbar-item">
+          <a class="navbar-link" href="/">Home</a>
+        </li>
+        <li class="navbar-item">
+          <a class="navbar-link" href="/profile">Profile</a>
+        </li>
+      </ul>
+    </div>
+    <div class="navbar-user">
+      <span class="navbar-username">{{ user.username }}</span>
+      <a class="navbar-link" href="{% url 'account_logout' %}">Logout</a>
+    </div>
+  </nav>
+  {% block body %}
+  {% block content %}
+  {% endblock %}
+  {% endblock %}
+  {% block extra_body %}
+  {% endblock %}
+</body>
+
+</html>

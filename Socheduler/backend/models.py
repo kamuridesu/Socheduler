@@ -12,12 +12,25 @@ PLATFORMS = [
 
 class SocialMediaAccount(models.Model):
     username = models.CharField(max_length=100)
+    platform = models.CharField(max_length=2, choices=PLATFORMS)
 
     def __str__(self):
         return f"{self.username} ({self.platform})"
 
     def __repr__(self):
         return f"SocialMediaAccount(username='{self.username}', platform='{self.platform}')"
+    
+    @property
+    def platforms_list(self):
+        return [p[0] for p in PLATFORMS]
+
+    def get_platform_display(self):
+        return ', '.join([p[1] for p in PLATFORMS if p[0] in self.platform])
+
+    def set_platform_display(self, value):
+        self.platform = ','.join(value)
+
+    platform_display = property(get_platform_display, set_platform_display)
 
 
 class Post(models.Model):

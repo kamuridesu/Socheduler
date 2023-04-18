@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Social Media Scheduler</h1>
+    <form>
+        <label for="socialMediaPlatform">Select a social media platform:</label>
+        <select name="socialMediaPlatform" id="socialMediaPlatform">
+            <option value="facebook">Facebook</option>
+            <option value="twitter">Twitter</option>
+            <option value="instagram">Instagram</option>
+            <option value="linkedin">LinkedIn</option>
+        </select>
+
+        <label for="postContent">Post content:</label>
+        <textarea name="postContent" id="postContent" rows="4" placeholder="Enter your post content here..."></textarea>
+
+        <label for="postDate">Post date:</label>
+        <input type="datetime-local" name="postDate" id="postDate" />
+        <br><br>
+        <button class="primaryAction"><i class="fab fa-facebook"></i>Post</button>
+        <button class="secondaryAction"><i class="fas fa-calendar-alt"></i>Schedule</button>
+    </form>
+</div>
+{% endblock %}
