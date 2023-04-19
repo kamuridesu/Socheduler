@@ -10,8 +10,7 @@ from django.http.response import JsonResponse
 from .models import Post, SocialMediaAccount
 from .serializers import PostSerializer, SocialAccontSerializer
 
-from .gist import Gist
-
+from . import gist
 
 class MainViewSet(viewsets.ModelViewSet):
     def list(self, request):
@@ -61,7 +60,7 @@ class GetAllGistsView(View := __import__("django").views.View):
         response = {"error": True, "message": "Error!"}
         token = request.POST.get("token")
         content = request.POST.get("content")
-        success = Gist.createGist(token, content)
+        success = gist.createGist(token, content)
         if success:
             response = {"error": False, "message": "Success!"}
         return JsonResponse(response)
