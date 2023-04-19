@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "rest_framework",  # Django Rest Framework
     "django.contrib.admin",
     "django.contrib.auth",
-    'django.contrib.sites',
+    "django.contrib.sites",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -47,11 +47,11 @@ INSTALLED_APPS = [
     "allauth_ui",
     "widget_tweaks",
     # Django AllAuth
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     # 'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
+    "allauth.socialaccount.providers.github",
     # 'allauth.socialaccount.providers.instagram',
     # 'allauth.socialaccount.providers.linkedin',
     # 'allauth.socialaccount.providers.linkedin_oauth2',
@@ -73,10 +73,9 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
+    "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 ROOT_URLCONF = "Socheduler.urls"
@@ -185,4 +184,3 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = "/"
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
-

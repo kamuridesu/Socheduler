@@ -3,13 +3,13 @@
 {% block content %}
 <div class="container">
     <h1>Social Media Scheduler</h1>
-    <form>
+    <form action="/" method="POST" onsubmit="return validateForm()">
+        {% csrf_token %}
         <label for="socialMediaPlatform">Select a social media platform:</label>
         <select name="socialMediaPlatform" id="socialMediaPlatform">
-            <option value="facebook">Facebook</option>
-            <option value="twitter">Twitter</option>
-            <option value="instagram">Instagram</option>
-            <option value="linkedin">LinkedIn</option>
+            {% for platform in platforms %}
+            <option value="{{ platform }}">{{ platform }}</option>
+            {% endfor %}
         </select>
 
         <label for="postContent">Post content:</label>
@@ -18,8 +18,19 @@
         <label for="postDate">Post date:</label>
         <input type="datetime-local" name="postDate" id="postDate" />
         <br><br>
-        <button class="primaryAction"><i class="fab fa-facebook"></i>Post</button>
-        <button class="secondaryAction"><i class="fas fa-calendar-alt"></i>Schedule</button>
+        <button class="primaryAction" type="submit" >Schedule</button>
     </form>
 </div>
+
+<script>
+    function validateForm() {
+        const dateTimeObject = document.getElementById("postDate");
+        const dateTime = Date.parse(dateTimeObject.value);
+        if (isNaN(dateTime) || dateTime - Date.now() < 0) {
+            alert("The selected schedule date and time cannot be empty or earlier than the current date and time!");
+            return false;
+        }
+        return true;
+    }
+</script>
 {% endblock %}

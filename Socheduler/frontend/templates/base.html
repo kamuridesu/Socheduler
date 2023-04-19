@@ -1,15 +1,13 @@
+{% load static %}
 <html>
 
 <head>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  {% block extra_head %}
-  {% endblock %}
-  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% block extra_head %}
+    {% endblock %}
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Media Scheduler</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-Lfa8zqfy3PQjZxvFkWtX8Fe0+PN1d4ELZZ/ZOvjWQJ0j+oWoMJzqxJ1vLxWJX8/WTnYJy6/1ikpA5C6fSKuGQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -156,33 +154,73 @@
         .navbar-user:hover .navbar-dropdown {
             display: block;
         }
+
+        @font-face {
+            font-family: "Concert";
+            src: url("{% static 'fonts/ConcertOne-Regular.ttf' %}") format("truetype");
+        }
+
+        /* Define two columns with a width of 50% each */
+        .error-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        /* Style for the left column */
+        .left-column {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Style for the right column */
+        .right-column {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Style for the image */
+        .error-img {
+            max-width: 50%;
+            height: auto;
+        }
+
+        .error-p,
+        .error-h1 {
+            font-family: Concert;
+        }
     </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-container">
-    <a class="navbar-brand" href="/">My Website</a>
-    <div class="navbar-menu">
-      <ul class="navbar-nav">
-        <li class="navbar-item">
-          <a class="navbar-link" href="/">Home</a>
-        </li>
-        <li class="navbar-item">
-          <a class="navbar-link" href="/profile">Profile</a>
-        </li>
-      </ul>
-    </div>
-    <div class="navbar-user">
-      <span class="navbar-username">{{ user.username }}</span>
-      <a class="navbar-link" href="{% url 'account_logout' %}">Logout</a>
-    </div>
-  </nav>
-  {% block body %}
-  {% block content %}
-  {% endblock %}
-  {% endblock %}
-  {% block extra_body %}
-  {% endblock %}
+    <nav class="navbar navbar-container">
+        <a class="navbar-brand" href="/">My Website</a>
+        <div class="navbar-menu">
+            <ul class="navbar-nav">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="/">Home</a>
+                </li>
+                <li class="navbar-item">
+                    <a class="navbar-link" href="/profile">Profile</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-user">
+            <span class="navbar-username">{{ user.username }}</span>
+            <a class="navbar-link" href="{% url 'account_logout' %}">Logout</a>
+        </div>
+    </nav>
+    {% block body %}
+    {% block content %}
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
 </body>
 
 </html>

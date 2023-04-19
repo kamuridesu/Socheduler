@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="error-container">
+    <div class="left-column">
+        <img class="error-img" src="https://mfiles.alphacoders.com/991/991948.jpg">
+    </div>
+    <div class="right-column">
+        <h1 class="error-h1">{{ title|default:"Page not found" }}</h1>
+        <p class="error-p">{{ message|default:"The page you search wasn't found! Please, try again!" }}</p>
+    </div>
+</div>
+{% endblock %}

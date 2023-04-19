@@ -1,12 +1,12 @@
 from django.db import models
 
 
-
 PLATFORMS = [
     ("FB", "Facebook"),
     ("TW", "Twitter"),
     ("IG", "Instagram"),
     ("LI", "LinkedIn"),
+    ("GH", "Github"),
 ]
 
 
@@ -19,16 +19,16 @@ class SocialMediaAccount(models.Model):
 
     def __repr__(self):
         return f"SocialMediaAccount(username='{self.username}', platform='{self.platform}')"
-    
+
     @property
     def platforms_list(self):
         return [p[0] for p in PLATFORMS]
 
     def get_platform_display(self):
-        return ', '.join([p[1] for p in PLATFORMS if p[0] in self.platform])
+        return ", ".join([p[1] for p in PLATFORMS if p[0] in self.platform])
 
     def set_platform_display(self, value):
-        self.platform = ','.join(value)
+        self.platform = ",".join(value)
 
     platform_display = property(get_platform_display, set_platform_display)
 
