@@ -1,6 +1,12 @@
+"""## Gist related tasks
+
+### funcs:
+- createGist(token: str, content: str) -> bool:
+    Creates a Gist for a user
+"""
+
 import json
 import requests
-
 
 def createGist(token: str, content: str) -> bool:
     headers = {
@@ -19,7 +25,15 @@ def createGist(token: str, content: str) -> bool:
         }
     }, separators=(',', ':'))
 
-    response = requests.post('https://api.github.com/gists', headers=headers, data=data)
-    if response.status_code == 201:
-        return True
-    return False
+    for _ in range(3):
+        response = requests.post('https://api.github.com/gists', headers=headers, data=data)
+        if response.status_code == 201:
+            return {
+                "error": False,
+                "response": response.json()
+            }
+    return {
+        "error": True,
+        "response": response.text,
+        "status": response.status_code
+    }
