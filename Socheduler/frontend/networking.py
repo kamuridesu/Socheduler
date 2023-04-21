@@ -30,7 +30,7 @@ def getAllScheduledPosts(tokens: list[dict]):
 
         response = requests.get("http://127.0.0.1:8000/api/posts/", headers=headers)
 
-        print(response)
+        print(response.json())
         if response.status_code == 200:
             responses.append(
                 {"provider": info["provider"], "response": response.json()}

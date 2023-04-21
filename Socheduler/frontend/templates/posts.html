@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load parse_iso %}
+{% block content %}
+<div class="container">
+  <table>
+    <thead>
+      <tr>
+        <th>Provider</th>
+        <th>Content</th>
+        <th>Scheduled Date</th>
+        <th>Published</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for provider in posts %}
+      {% for post in provider.response %}
+        <tr>
+            <td>{{ provider.provider|title }}</td>
+          <td>{{ post.content }}</td>
+          <td>{{ post.scheduled_date|parse_iso|date:"D d M Y" }} {{ post.scheduled_date|parse_iso|time:"H:i" }}</td>
+          <td>{{ post.is_published }}</td>
+          <td>
+            {% if not post.is_published %}
+              <a href="#">Edit</a> |
+              <a href="#">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No scheduled posts.</td>
+        </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

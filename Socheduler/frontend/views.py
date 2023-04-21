@@ -61,7 +61,14 @@ class PostsView(View):
         providers = [account.provider for account in user_social_accounts]
         tokens = get_user_token(request, providers)
         scheduled_posts = getAllScheduledPosts(tokens)
-        print(scheduled_posts)
+        if scheduled_posts:
+            return render(
+                request,
+                "posts.html",
+                context={
+                    "posts": scheduled_posts
+                }
+            )
         return render(
             request,
             "error.html",
