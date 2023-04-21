@@ -6,7 +6,7 @@ from . import models
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserModel
-        fields = '__all__'
+        fields = "__all__"
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -16,10 +16,14 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PostModel
-        fields = '__all__'
+        fields = "__all__"
 
     def create(self, validated_data: dict):
-        user, created = models.UserModel.objects.get_or_create(username=validated_data.pop("username"), token=validated_data.pop("token"), provider=validated_data.pop("provider"))
+        user, created = models.UserModel.objects.get_or_create(
+            username=validated_data.pop("username"),
+            token=validated_data.pop("token"),
+            provider=validated_data.pop("provider"),
+        )
         if created:
             user.save()
         print(user)

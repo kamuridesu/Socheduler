@@ -8,7 +8,7 @@ class UserModel(models.Model):
 
     def __str__(self):
         return self.username
-    
+
     def is_authenticated(self):
         if self.token:
             return True
@@ -21,7 +21,9 @@ class PostManager(models.Manager):
 
 
 class PostModel(models.Model):
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=True, default=None)
+    user = models.ForeignKey(
+        UserModel, on_delete=models.CASCADE, null=True, default=None
+    )
     content: str = models.TextField()
     scheduled_date = models.DateTimeField()
     is_published = models.BooleanField(default=False)

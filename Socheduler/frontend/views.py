@@ -9,7 +9,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from .networking import schedulePostInBackend
+from .networking import schedulePostInBackend, getAllScheduledPosts
+from .utils import get_user_token
 
 
 @method_decorator(login_required, name="dispatch")
@@ -41,11 +42,34 @@ class IndexView(View):
         provider = request.POST.get("socialMediaPlatform")
         content = request.POST.get("postContent")
         date = request.POST.get("postDate")
-        user_account = SocialAccount.objects.get(user=request.user)
-        social_app = SocialApp.objects.get(provider=provider.lower())
-        token = SocialToken.objects.get(app=social_app, account=user_account).token
-        schedulePostInBackend(csfr_token, token=token, username = request.user.username, content=content, platform=provider, date_time=date)
+        token = self.get_user_token(request, provider)
+        schedulePostInBackend(
+            csfr_token,
+            token=token,
+            username=request.user.username,
+            content=content,
+            platform=provider,
+            date_time=date,
+        )
         return redirect("/")
+
+
+@method_decorator(login_required, name="dispatch")
+class PostsView(View):
+    def get(self, request):
+        user_social_accounts = SocialAccount.objects.filter(user=request.user)
+        providers = [account.provider for account in user_social_accounts]
+        tokens = get_user_token(request, providers)
+        scheduled_posts = getAllScheduledPosts(tokens)
+        print(scheduled_posts)
+        return render(
+            request,
+            "error.html",
+            context={
+                "message": "Go to profile to add a social account!",
+                "title": "NO ACCOUNT LINKED!",
+            },
+        )
 
 
 @method_decorator(login_required, name="dispatch")

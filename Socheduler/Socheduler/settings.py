@@ -185,8 +185,4 @@ LOGIN_REDIRECT_URL = "/"
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
-SOCIALACCOUNT_PROVIDERS = {
-    'github': {
-        'SCOPE': ["user", "gist"]
-    }
-}
+SOCIALACCOUNT_PROVIDERS = {"github": {"SCOPE": ["user", "gist"]}}
