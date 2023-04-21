@@ -10,16 +10,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    username = serializers.CharField(max_length=100, write_only=True)
+    token = serializers.CharField(max_length=255, write_only=True)
+    provider = serializers.CharField(max_length=100, write_only=True)
+
     class Meta:
         model = models.PostModel
         fields = '__all__'
 
     def create(self, validated_data: dict):
-        user_data = validated_data.pop("user")
-        print(user_data)
-        user = models.UserModel.objects.create(**user_data)
-        user.save()
+        user, created = models.UserModel.objects.get_or_create(username=validated_data.pop("username"), token=validated_data.pop("token"), provider=validated_data.pop("provider"))
+        if created:
+            user.save()
+        print(user)
+        print("valiodated data: ")
+        print(validated_data)
         new_post = models.PostModel.objects.create(user=user, **validated_data)
         new_post.save()
-        return super().create(validated_data)
+        return new_post
