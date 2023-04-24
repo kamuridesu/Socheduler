@@ -1,6 +1,6 @@
 from allauth.account import app_settings as account_settings
 from allauth.socialaccount.views import ConnectionsView
-from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
+from allauth.socialaccount.models import SocialAccount
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -15,8 +15,9 @@ from .utils import get_user_token
 
 @method_decorator(login_required, name="dispatch")
 class IndexView(View):
-    def get(self, request):
+    def get(self, request: HttpRequest):
         user_social_accounts = SocialAccount.objects.filter(user=request.user)
+        print(request.user.pk)
         if user_social_accounts:
             return render(
                 request,
@@ -45,6 +46,7 @@ class IndexView(View):
         token = self.get_user_token(request, provider)
         schedulePostInBackend(
             csfr_token,
+            uuid=request.user.pk,
             token=token,
             username=request.user.username,
             content=content,
@@ -63,7 +65,7 @@ class PostsView(View):
         scheduled_posts = getAllScheduledPosts(tokens)
         if scheduled_posts:
             return render(
-                request,
+                request,  
                 "posts.html",
                 context={
                     "posts": scheduled_posts

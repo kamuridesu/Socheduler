@@ -15,7 +15,7 @@
     <tbody>
       {% for provider in posts %}
       {% for post in provider.response %}
-        <tr>
+        <tr id="{{ post.id }}">
             <td>{{ provider.provider|title }}</td>
           <td>{{ post.content }}</td>
           <td>{{ post.scheduled_date|parse_iso|date:"D d M Y" }} {{ post.scheduled_date|parse_iso|time:"H:i" }}</td>

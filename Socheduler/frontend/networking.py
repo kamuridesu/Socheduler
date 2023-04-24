@@ -3,6 +3,7 @@ import requests
 
 def schedulePostInBackend(
     csrf_token: str,
+    uuid: str,
     token: str,
     username: str,
     content: str,
@@ -11,6 +12,7 @@ def schedulePostInBackend(
 ):
     post_data = {
         "csrfmiddlewaretoken": csrf_token,
+        "uuid": uuid,
         "token": token,
         "username": username,
         "content": content,
@@ -26,7 +28,7 @@ def getAllScheduledPosts(tokens: list[dict]):
     responses: list[requests.Reponse] = []
     for info in tokens:
         token = info["token"]
-        headers = {"Authorization": f"Token {token}"}
+        headers = {"Authorization": f"UUID {token}"}
 
         response = requests.get("http://127.0.0.1:8000/api/posts/", headers=headers)
 

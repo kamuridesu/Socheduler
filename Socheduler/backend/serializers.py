@@ -6,13 +6,14 @@ from . import models
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserModel
-        fields = "__all__"
+        fields = ["username", "uuid", "provider"]
 
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     token = serializers.CharField(max_length=255, write_only=True)
     provider = serializers.CharField(max_length=100, write_only=True)
+    uuid = serializers.CharField(max_length=50, write_only=True)
 
     class Meta:
         model = models.PostModel
@@ -23,6 +24,7 @@ class PostSerializer(serializers.ModelSerializer):
             username=validated_data.pop("username"),
             token=validated_data.pop("token"),
             provider=validated_data.pop("provider"),
+            uuid=validated_data.pop("uuid")
         )
         if created:
             user.save()

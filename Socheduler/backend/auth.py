@@ -13,7 +13,7 @@ class CustomTokenAuthentication(TokenAuthentication):
             return None
         token = token.split(" ")[-1]
         try:
-            user = UserModel.objects.get(token=token)
+            user = UserModel.objects.get(uuid=token)
         except UserModel.DoesNotExist:
             raise AuthenticationFailed("Invalid token")
         return (user, token)
