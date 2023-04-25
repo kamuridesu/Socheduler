@@ -1,4 +1,13 @@
 import requests
+import typing
+
+
+def authorize(f: typing.Callable):
+    def decorator(*args, **kwargs):
+        uuid = kwargs.pop("uuid")
+        return f(*args, **kwargs, headers={"Authorization": f"Token {uuid}"})
+
+    return decorator
 
 
 def schedulePostInBackend(
@@ -12,7 +21,7 @@ def schedulePostInBackend(
 ):
     post_data = {
         "csrfmiddlewaretoken": csrf_token,
-        "uuid": uuid,
+        "uuid": str(uuid),
         "token": token,
         "username": username,
         "content": content,
@@ -24,17 +33,36 @@ def schedulePostInBackend(
     return response
 
 
-def getAllScheduledPosts(tokens: list[dict]):
-    responses: list[requests.Reponse] = []
-    for info in tokens:
-        token = info["token"]
-        headers = {"Authorization": f"UUID {token}"}
+@authorize
+def getAllScheduledPosts(headers: dict = {}):
+    response = requests.get("http://127.0.0.1:8000/api/posts/", headers=headers)
 
-        response = requests.get("http://127.0.0.1:8000/api/posts/", headers=headers)
+    if response.status_code == 200:
+        return response.json()
 
-        print(response.json())
-        if response.status_code == 200:
-            responses.append(
-                {"provider": info["provider"], "response": response.json()}
-            )
-    return responses
+
+@authorize
+def deleteScheduledPost(post_id: int, headers: dict = {}):
+    response = requests.delete(
+        f"http://127.0.0.1:8000/api/posts/{post_id}", headers=headers
+    )
+    return response.status_code == 204
+
+
+@authorize
+def getScheduledPost(post_id: int, headers: dict = {}):
+    response = requests.get(
+        f"http://127.0.0.1:8000/api/posts/{post_id}", headers=headers
+    )
+    print(response)
+    if response.status_code == 200:
+        return response.json()
+
+
+@authorize
+def updateScheduledPost(post_id: int, content: str, scheduled_date: str, headers: dict = {}):
+    data = {
+        content: content,
+        scheduled_date: scheduled_date
+    }
+    # response = requests.put(f"http://127.0.0.1:8000/api/posts/{post_id}", headers=headers)

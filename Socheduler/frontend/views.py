@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from .networking import schedulePostInBackend, getAllScheduledPosts
+from .networking import schedulePostInBackend, getAllScheduledPosts, deleteScheduledPost, getScheduledPost
 from .utils import get_user_token
 
 
@@ -17,7 +17,6 @@ from .utils import get_user_token
 class IndexView(View):
     def get(self, request: HttpRequest):
         user_social_accounts = SocialAccount.objects.filter(user=request.user)
-        print(request.user.pk)
         if user_social_accounts:
             return render(
                 request,
@@ -36,6 +35,7 @@ class IndexView(View):
                 "message": "Go to profile to add a social account!",
                 "title": "NO ACCOUNT LINKED!",
             },
+            status=401,
         )
 
     def post(self, request: HttpRequest):
@@ -43,14 +43,14 @@ class IndexView(View):
         provider = request.POST.get("socialMediaPlatform")
         content = request.POST.get("postContent")
         date = request.POST.get("postDate")
-        token = self.get_user_token(request, provider)
+        token = get_user_token(request, provider)
         schedulePostInBackend(
             csfr_token,
             uuid=request.user.pk,
             token=token,
             username=request.user.username,
             content=content,
-            platform=provider,
+            provider=provider,
             date_time=date,
         )
         return redirect("/")
@@ -59,25 +59,63 @@ class IndexView(View):
 @method_decorator(login_required, name="dispatch")
 class PostsView(View):
     def get(self, request):
-        user_social_accounts = SocialAccount.objects.filter(user=request.user)
-        providers = [account.provider for account in user_social_accounts]
-        tokens = get_user_token(request, providers)
-        scheduled_posts = getAllScheduledPosts(tokens)
+        scheduled_posts = getAllScheduledPosts(uuid=request.user.pk)
         if scheduled_posts:
+            return render(request, "posts.html", context={"posts": scheduled_posts})
+        return render(
+            request,
+            "error.html",
+            context={
+                "message": "Please, create a post!",
+                "title": "NO POSTS FOUND!",
+            },
+            status=404,
+        )
+
+
+@method_decorator(login_required, name="dispatch")
+class DeletePostsView(View):
+    def get(self, request, pk):
+        post_id = pk
+        if request.GET.get("confirm") == "true":
+            is_deleted = deleteScheduledPost(post_id, uuid=request.user.pk)
+            if is_deleted:
+                return render(request, "delete.html", context={"deleted": True})
             return render(
-                request,  
-                "posts.html",
+                request,
+                "error.html",
                 context={
-                    "posts": scheduled_posts
-                }
+                    "message": "Please, select a valid post!",
+                    "title": "POST NOT FOUND!",
+                },
+                status=404,
+            )
+        return render(
+            request,
+            "delete.html",
+        )
+
+
+@method_decorator(login_required, name="dispatch")
+class EditPostsView(View):
+    def get(self, request, pk):
+        scheduled_post = getScheduledPost(pk, uuid=request.user.pk)
+        if scheduled_post:
+            return render(
+                request,
+                "edit.html",
+                context={
+                    "post": scheduled_post
+                },
             )
         return render(
             request,
             "error.html",
             context={
-                "message": "Go to profile to add a social account!",
-                "title": "NO ACCOUNT LINKED!",
+                "message": "Please, create a post!",
+                "title": "NO POSTS FOUND!",
             },
+            status=404,
         )
 
 

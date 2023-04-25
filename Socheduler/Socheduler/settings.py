@@ -14,6 +14,7 @@ import os
 from celery.schedules import crontab
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -184,6 +185,6 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = "/"
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
-AUTH_USER_MODEL = 'frontend.UUIDUser'
+AUTH_USER_MODEL = "frontend.UUIDUser"
 
 SOCIALACCOUNT_PROVIDERS = {"github": {"SCOPE": ["user", "gist"]}}

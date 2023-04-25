@@ -11,8 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
-    token = serializers.CharField(max_length=255, write_only=True)
-    provider = serializers.CharField(max_length=100, write_only=True)
     uuid = serializers.CharField(max_length=50, write_only=True)
 
     class Meta:
@@ -21,10 +19,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         user, created = models.UserModel.objects.get_or_create(
-            username=validated_data.pop("username"),
-            token=validated_data.pop("token"),
-            provider=validated_data.pop("provider"),
-            uuid=validated_data.pop("uuid")
+            username=validated_data.pop("username"), uuid=validated_data.pop("uuid")
         )
         if created:
             user.save()
