@@ -8,8 +8,10 @@
 import json
 import requests
 
+from .models import PostModel
 
-def createGist(token: str, content: str) -> bool:
+
+def createGist(pk: int, token: str, content: str) -> bool:
     headers = {
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {token}",
@@ -30,5 +32,12 @@ def createGist(token: str, content: str) -> bool:
             "https://api.github.com/gists", headers=headers, data=data
         )
         if response.status_code == 201:
+            try:
+                post = PostModel.objects.get(pk=pk)
+                post.is_published = True
+                post.save()
+            except PostModel.DoesNotExist:
+                print("Post with pk " + str(pk) + " does not exists!")
+                pass
             return {"error": False, "response": response.json()}
     return {"error": True, "response": response.text, "status": response.status_code}

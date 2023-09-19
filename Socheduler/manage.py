@@ -7,8 +7,9 @@ import sys
 
 def load_env_vars():
     env_file_path = Path(__file__).parent.parent / ".env"
-    with open(env_file_path, "r") as f:
-        [os.environ.setdefault(line.split("=")[0], line.split("=")[1]) for line in f]
+    if env_file_path.is_file():
+        with open(env_file_path, "r") as f:
+            [os.environ.setdefault(line.split("=")[0], line.split("=")[1]) for line in f]
 
 
 def main():

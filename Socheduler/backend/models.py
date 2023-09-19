@@ -1,4 +1,7 @@
+from typing import Any
 from django.db import models
+
+from Socheduler.celery import app
 
 
 class UserModel(models.Model):
@@ -29,3 +32,12 @@ class PostModel(models.Model):
     scheduled_date = models.DateTimeField()
     is_published = models.BooleanField(default=False)
     objects = PostManager()
+
+
+class TaskModel(models.Model):
+    task_id = models.CharField(max_length=100, unique=True, blank=False)
+    post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
+
+    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
+        app.control.revoke(self.task_id, terminate=True, signal='SIGKILL')
+        return super().delete(*args, **kwargs)

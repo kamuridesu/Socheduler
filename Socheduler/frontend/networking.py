@@ -54,15 +54,18 @@ def getScheduledPost(post_id: int, headers: dict = {}):
     response = requests.get(
         f"http://127.0.0.1:8000/api/posts/{post_id}", headers=headers
     )
-    print(response)
     if response.status_code == 200:
         return response.json()
 
 
 @authorize
-def updateScheduledPost(post_id: int, content: str, scheduled_date: str, headers: dict = {}):
-    data = {
-        content: content,
-        scheduled_date: scheduled_date
+def updateScheduledPost(post_id: int, content: str, scheduled_date: str, csrf_token: str, headers: dict = {}):
+    post_data = {
+        "csrfmiddlewaretoken": csrf_token,
+        "content": content,
+        "scheduled_date": scheduled_date,
     }
-    # response = requests.put(f"http://127.0.0.1:8000/api/posts/{post_id}", headers=headers)
+
+    response = requests.put(
+        f"http://127.0.0.1:8000/api/posts/{post_id}/", headers=headers, data=post_data)
+    print(response)

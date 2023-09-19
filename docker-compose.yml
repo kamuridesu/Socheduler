@@ -1,0 +1,50 @@
+version: '3'
+services:
+  redis:
+    container_name: redis-stack-server
+    image: redis/redis-stack-server:latest
+    networks:
+      - django_network
+    ports:
+      - 6379:6379
+    restart: on-failure
+
+  web:
+    build: ./Socheduler
+    command: sh -c "python manage.py collectstatic --no-input && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: web
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+    depends_on:
+      - redis
+    env_file:
+      - ./.env
+    ports:
+      - 8000:8000
+    hostname: web
+    networks:
+      - django_network
+    restart: on-failure
+
+  celery_worker:
+    build: ./Socheduler
+    command: sh -c "celery -A Socheduler worker -l info"
+    container_name: celery_worker
+    environment:
+      # This environment variable must be set to allow celery with pickle serializer to run with root access
+      - C_FORCE_ROOT=True
+      - DJANGO_SETTINGS_MODULE=Socheduler.settings
+    depends_on:
+      - web
+      - redis
+    env_file:
+      - ./.env
+    restart: on-failure
+    hostname: celery_worker
+    networks:
+      - django_network
+
+
+
+networks:
+  django_network:

@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
 from . import models
+from .tasks import createGist
+from datetime import datetime, timezone
+from celery.result import AsyncResult
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,9 +26,13 @@ class PostSerializer(serializers.ModelSerializer):
         )
         if created:
             user.save()
-        print(user)
-        print("valiodated data: ")
-        print(validated_data)
+
         new_post = models.PostModel.objects.create(user=user, **validated_data)
         new_post.save()
+
+        countdown = (new_post.scheduled_date - datetime.now(timezone.utc)).total_seconds()
+        task: AsyncResult = createGist.apply_async(args=(new_post.pk, new_post.token, new_post.content), countdown=round(countdown))
+        new_task = models.TaskModel.objects.create(task_id=task.id, post=new_post)
+        new_task.save()
+
         return new_post

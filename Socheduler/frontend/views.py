@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from .networking import schedulePostInBackend, getAllScheduledPosts, deleteScheduledPost, getScheduledPost
+from .networking import schedulePostInBackend, getAllScheduledPosts, deleteScheduledPost, getScheduledPost, updateScheduledPost
 from .utils import get_user_token
 
 
@@ -117,7 +117,18 @@ class EditPostsView(View):
             },
             status=404,
         )
+    
+    def post(self, request, pk):
+        scheduled_post = getScheduledPost(pk, uuid=request.user.pk)
 
+        csfr_token = request.POST.get("csrfmiddlewaretoken")
+        content = request.POST.get("content")
+        date = request.POST.get("scheduled_date")
+
+        if scheduled_post:
+            is_udpated = updateScheduledPost(pk, content, date, csfr_token, uuid=request.user.pk)
+
+        return redirect("/posts")
 
 @method_decorator(login_required, name="dispatch")
 class ProfileView(ConnectionsView):

@@ -5,7 +5,7 @@ from django.db import models
 
 
 class UUIDUser(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
 
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
